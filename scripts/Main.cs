@@ -1,60 +1,70 @@
 public partial class Main : Node
 {
 
-	[Export]
-	public PackedScene MobScene { get; set; }
+    [Export]
+    public PackedScene MobScene { get; set; }
 
-	int _score;
+    int _score;
 
-	public void GameOver()
-	{
-		GetNode<Timer>("MobTimer").Stop();
-		GetNode<Timer>("ScoreTimer").Stop();
-	}
+    public void GameOver()
+    {
+        GetNode<Timer>("MobTimer").Stop();
+        GetNode<Timer>("ScoreTimer").Stop();
+        GetNode<HUD>("HUD").ShowGameOver();
 
-	public void NewGame()
-	{
-		_score = 0;
+    }
 
-		var player = GetNode<Player>("Player");
-		var startPos = GetNode<Marker2D>("StartPosition");
-		player.Start(startPos.Position);
+    public void NewGame()
+    {
+        _score = 0;
 
-		GetNode<Timer>("StartTimer").Start();
-	}
+        GetTree().CallGroup("mobs", Node.MethodName.QueueFree);
 
-	private void OnScoreTimerTimeout()
-	{
-		_score++;
-	}
+        var hud = GetNode<HUD>("HUD");
+        hud.UpdateScore(_score);
+        hud.ShowMessage("Get Ready!");
 
-	private void OnStartTimerTimeout()
-	{
-		GetNode<Timer>("MobTimer").Start();
-		GetNode<Timer>("ScoreTimer").Start();
-	}
+        var player = GetNode<Player>("Player");
+        var startPos = GetNode<Marker2D>("StartPosition");
+        player.Start(startPos.Position);
 
-	private void OnMobTimerTimeout()
-	{
-		var mob = MobScene.Instantiate<Mob>();
+        GetNode<Timer>("StartTimer").Start();
+    }
 
-		var mobSpawnLoc = GetNode<PathFollow2D>("Path2D/PathFollow2D");
-		mobSpawnLoc.ProgressRatio = GD.Randf();
+    private void OnScoreTimerTimeout()
+    {
+        _score++;
+    }
 
-		var direction = mobSpawnLoc.Rotation + Mathf.Pi / 2;
-		mob.Position = mobSpawnLoc.Position;
+    private void OnStartTimerTimeout()
+    {
+        GetNode<Timer>("MobTimer").Start();
+        GetNode<Timer>("ScoreTimer").Start();
+    }
 
-		direction += (float)GD.RandRange(-Mathf.Pi / 4, Mathf.Pi / 4);
-		mob.Rotation = direction;
+    private void OnMobTimerTimeout()
+    {
+        var mob = MobScene.Instantiate<Mob>();
 
-		var velocity = new Vector2(GD.RandRange(150, 250), 0);
-		mob.LinearVelocity = velocity.Rotated(direction);
+        GetNode<HUD>("HUD").UpdateScore(_score);
 
-		AddChild(mob);
-	}
+        var mobSpawnLoc = GetNode<PathFollow2D>("Path2D/PathFollow2D");
+        mobSpawnLoc.ProgressRatio = GD.Randf();
 
-	public override void _Ready()
-	{
-		NewGame();
-	}
+        var direction = mobSpawnLoc.Rotation + Mathf.Pi / 2;
+        mob.Position = mobSpawnLoc.Position;
+
+        direction += (float)GD.RandRange(-Mathf.Pi / 4, Mathf.Pi / 4);
+        mob.Rotation = direction;
+
+        var velocity = new Vector2(GD.RandRange(150, 250), 0);
+        mob.LinearVelocity = velocity.Rotated(direction);
+
+        AddChild(mob);
+    }
+
+    public override void _Ready()
+    {
+        NewGame();
+    }
 }
