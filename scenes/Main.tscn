@@ -1,15 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://cvjbcx7iyotkc"]
+[gd_scene load_steps=6 format=3 uid="uid://cvjbcx7iyotkc"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_nsijb"]
 [ext_resource type="PackedScene" uid="uid://2cqtaua8051" path="res://scenes/Player.tscn" id="1_tklfi"]
+[ext_resource type="PackedScene" uid="uid://dvf0f3awhxbug" path="res://scenes/Mob.tscn" id="2_5u8xc"]
+[ext_resource type="PackedScene" uid="uid://cv4lwqld82yd6" path="res://scenes/HUD.tscn" id="3_eudd1"]
+
+[sub_resource type="Curve2D" id="Curve2D_52wht"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 720, 0, 0, 0, 0, 0, 720, 0, 0, 0, 0, 0, 0)
+}
+point_count = 5
 
 [node name="Main" type="Node"]
 script = ExtResource("1_nsijb")
+MobScene = ExtResource("2_5u8xc")
 
 [node name="Player" parent="." instance=ExtResource("1_tklfi")]
-position = Vector2(246, 419)
+metadata/_edit_lock_ = true
 
 [node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(240, 450)
 
 [node name="MobTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -18,6 +28,17 @@ wait_time = 0.5
 
 [node name="StartTimer" type="Timer" parent="."]
 wait_time = 2.0
+one_shot = true
 
+[node name="HUD" parent="." instance=ExtResource("3_eudd1")]
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_52wht")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+
+[connection signal="timeout" from="MobTimer" to="." method="OnMobTimerTimeout"]
 [connection signal="timeout" from="ScoreTimer" to="." method="OnScoreTimerTimeout"]
 [connection signal="timeout" from="StartTimer" to="." method="OnStartTimerTimeout"]
