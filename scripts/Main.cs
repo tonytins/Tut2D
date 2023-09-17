@@ -18,7 +18,7 @@ public partial class Main : Node
 
         var player = GetNode<Player>("Player");
         var startPos = GetNode<Marker2D>("StartPosition");
-        player.Start(startPos.Position);
+        // player.Start(startPos.Position);
 
         GetNode<Timer>("StartTimer").Start();
     }
