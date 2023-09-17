@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvjbcx7iyotkc"]
+
+[ext_resource type="Script" path="res://scripts/Main.cs" id="1_nsijb"]
+[ext_resource type="PackedScene" uid="uid://2cqtaua8051" path="res://scenes/Player.tscn" id="1_tklfi"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_nsijb")
+
+[node name="Player" parent="." instance=ExtResource("1_tklfi")]
+position = Vector2(246, 419)
+
+[node name="StartPosition" type="Marker2D" parent="."]
+
+[node name="MobTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+
+[connection signal="timeout" from="ScoreTimer" to="." method="OnScoreTimerTimeout"]
+[connection signal="timeout" from="StartTimer" to="." method="OnStartTimerTimeout"]
