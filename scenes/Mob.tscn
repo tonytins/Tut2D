@@ -1,26 +1,56 @@
-[gd_scene load_steps=3 format=3 uid="uid://dvf0f3awhxbug"]
+[gd_scene load_steps=10 format=3 uid="uid://dvf0f3awhxbug"]
 
 [ext_resource type="Script" path="res://scripts/Mob.cs" id="1_ekssb"]
+[ext_resource type="Texture2D" uid="uid://b2kl5lfjvfamn" path="res://art/enemyFlyingAlt_1.png" id="2_pysqj"]
+[ext_resource type="Texture2D" uid="uid://bva3hx3endab1" path="res://art/enemyFlyingAlt_2.png" id="3_820iy"]
+[ext_resource type="Texture2D" uid="uid://b4ccvj02c3ll3" path="res://art/enemySwimming_1.png" id="4_carr0"]
+[ext_resource type="Texture2D" uid="uid://btqiixp7k121r" path="res://art/enemySwimming_2.png" id="5_dpqne"]
+[ext_resource type="Texture2D" uid="uid://c0rqpkcjvnm32" path="res://art/enemyWalking_1.png" id="6_wxp2w"]
+[ext_resource type="Texture2D" uid="uid://bes2vfxn1v5ls" path="res://art/enemyWalking_2.png" id="7_1mhor"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wwnmb"]
 animations = [{
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_pysqj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_820iy")
+}],
 "loop": true,
 "name": &"fly",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_carr0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_dpqne")
+}],
 "loop": true,
 "name": &"swim",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_wxp2w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_1mhor")
+}],
 "loop": true,
 "name": &"walk",
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_boi2m"]
+radius = 55.0
+height = 110.0
+
 [node name="Mob" type="RigidBody2D"]
+collision_mask = 0
+gravity_scale = 2.66454e-15
 script = ExtResource("1_ekssb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -28,6 +58,8 @@ sprite_frames = SubResource("SpriteFrames_wwnmb")
 animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(12, 0)
+shape = SubResource("CapsuleShape2D_boi2m")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 
