@@ -25,7 +25,7 @@ public partial class Player : Area2D
 	public override void _Process(double delta)
 	{
 		var velocity = Vector2.Zero; // Player's movement
-		var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		var animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
 		if (Input.IsActionPressed("move_right"))
 			velocity.X += Speed;
@@ -42,23 +42,23 @@ public partial class Player : Area2D
 		if (velocity.Length() > 0)
 		{
 			velocity = velocity.Normalized() * Speed;
-			animatedSprite2D.Play();
+			animatedSprite.Play();
 		}
 		else
 		{
-			animatedSprite2D.Stop();
+			animatedSprite.Stop();
 		}
 
 		if (velocity.X != 0)
 		{
-			animatedSprite2D.Animation = "walk";
-			animatedSprite2D.FlipV = false;
-			animatedSprite2D.FlipH = velocity.X < 0;
+			animatedSprite.Animation = "walk";
+			animatedSprite.FlipV = false;
+			animatedSprite.FlipH = velocity.X < 0;
 		}
 		else if (velocity.Y != 0)
 		{
-			animatedSprite2D.Animation = "up";
-			animatedSprite2D.FlipV = velocity.Y > 0;
+			animatedSprite.Animation = "up";
+			animatedSprite.FlipV = velocity.Y > 0;
 		}
 
 		Position += velocity * (float)delta;
@@ -73,6 +73,7 @@ public partial class Player : Area2D
 	{
 		Hide();
 		EmitSignal(SignalName.Hit);
-		GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+		GetNode<CollisionShape2D>("CollisionShape2D")
+			.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
 	}
 }
